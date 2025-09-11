@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>روبوت الدردشة يوسف فارسي</title>
+  <style>
+    /* خطوط وألوان أساسية */
+    :root {
+      --primary-color: #1abc9c; /* أخضر مزرق */
+      --secondary-color: #16a085;
+      --background-color: #e0f7f4;
+      --chat-bg: #ffffff;
+      --user-msg: #1abc9c;
+      --bot-msg: #ecf0f1;
+      --text-color: #2c3e50;
+      --placeholder-color: #95a5a6;
+      --button-hover: #16a085;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      background: var(--background-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      gap: 20px;
+    }
+
+    /* الشعار */
+    #logo {
+      text-align: center;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    #logo .fr {
+      font-size: 38px;
+      font-weight: bold;
+      color: var(--primary-color);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    #logo .ar {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--text-color);
+      margin-top: 5px;
+    }
+
+    #chat {
+      width: 95%;
+      max-width: 500px;
+      background: var(--chat-bg);
+      border-radius: 25px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      border: 2px solid var(--primary-color);
+      transition: transform 0.3s ease;
+    }
+
+    #chat:hover {
+      transform: scale(1.02);
+    }
+
+    #messages {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .msg {
+      margin: 5px 0;
+      padding: 12px 18px;
+      border-radius: 20px;
+      max-width: 75%;
+      font-size: 15px;
+      line-height: 1.4;
+      word-wrap: break-word;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.05);
+      transition: all 0.3s ease;
+    }
+
+    .user {
+      background: var(--user-msg);
+      color: #fff;
+      margin-left: auto;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot {
+      background: var(--bot-msg);
+      color: var(--text-color);
+      margin-right: auto;
+      border-bottom-left-radius: 0;
+    }
+
+    #input-area {
+      display: flex;
+      border-top: 1px solid #ddd;
+      background: #f8f9fa;
+    }
+
+    #input {
+      flex: 1;
+      border: none;
+      padding: 14px 16px;
+      font-size: 16px;
+      color: var(--text-color);
+      outline: none;
+      background: transparent;
+    }
+
+    #input::placeholder {
+      color: var(--placeholder-color);
+      font-style: italic;
+    }
+
+    button {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0 25px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: var(--button-hover);
+    }
+
+    /* شريط تمرير جميل */
+    #messages::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #messages::-webkit-scrollbar-thumb {
+      background-color: var(--primary-color);
+      border-radius: 10px;
+    }
+
+    #messages::-webkit-scrollbar-track {
+      background: #d0f0ed;
+    }
+  </style>
+</head>
+<body>
+  <!-- الشعار -->
+  <div id="logo">
+    <div class="fr">YOUCEF FARSI</div>
+    <div class="ar">يوسف فارسي</div>
+  </div>
+
+  <div id="chat">
+    <div id="messages"></div>
+    <div id="input-area">
+      <input id="input" type="text" placeholder="اكتب رسالتك..." />
+      <button onclick="sendMessage()">إرسال</button>
+    </div>
+  </div>
+
+  <script>
+    const messagesDiv = document.getElementById("messages");
+    const input = document.getElementById("input");
+
+    const knowledgeBase = {
+      "من انت": "مرحبا 👋 أنا روبوت الدردشة إسمي يوسف فارسي، أنا هنا لخدمتك.",
+      "اسمك": "إسمي روبوت يوسف فارسي 🤖.",
+      "ماهيتك": "أنا روبوت ذكاء اصطناعي خاص بيوسف فارسي.",
+      "من صنعك": "صنعني و برمجني المبتكر المبرمج يوسف فارسي.",
+      "من برمجك": "برمجني يوسف فارسي، مبتكر ومبرمج جزائري.",
+      "من هو يوسف فارسي": "يوسف فارسي من مواليد 10 نوفمبر 1988 بمدينة الشريعة، ولاية تبسة، الجزائر.",
+      "اهلا": "مرحبا 👋 أنا يوسف فارسي روبوت ذكاء اصطناعي، أنا هنا لخدمتك. تفضل بالسؤال.",
+      "مرحبا": "مرحبا 👋 أنا يوسف فارسي روبوت ذكاء اصطناعي، أنا هنا لخدمتك. تفضل بالسؤال.",
+      "السلام عليكم": "مرحبا 👋 أنا يوسف فارسي روبوت ذكاء اصطناعي، أنا هنا لخدمتك. تفضل بالسؤال.",
+      "كيف حالك": "أنا بخير 😊 بما أني روبوت لا أتعب، ماذا عنك؟",
+      "صباح الخير": "صباح النور 🌞 أتمنى لك يوما جميلا.",
+      "مساء الخير": "مساء النور 🌙 كيف كان يومك؟",
+      "شكرا": "العفو 🙏 هذا واجبي.",
+      "باي": "إلى اللقاء 👋 كان سعيدا التحدث معك."
+    };
+
+    let memory = [];
+
+    const smallNumbers = { "صفر":0,"واحد":1,"إثنان":2,"اثنان":2,"ثلاثة":3,"أربعة":4,"خمسة":5,"ستة":6,"سبعة":7,"ثمانية":8,"تسعة":9,"عشرة":10,"أحد عشر":11,"اثنا عشر":12,"ثلاثة عشر":13,"أربعة عشر":14,"خمسة عشر":15,"ستة عشر":16,"سبعة عشر":17,"ثمانية عشر":18,"تسعة عشر":19 };
+    const tens = { "عشرون":20,"ثلاثون":30,"أربعون":40,"خمسون":50,"ستون":60,"سبعون":70,"ثمانون":80,"تسعون":90 };
+    const hundreds = { "مئة":100,"مائة":100,"مئتان":200 };
+    const thousands = { "ألف":1000,"ألفين":2000 };
+    const operators = { "زائد":"+","ناقص":"-","في":"*","ضرب":"*","قسمة":"/","على":"/" };
+
+    function wordsToNumber(text) {
+      text = text.replace(/و/g, " ");
+      const parts = text.split(" ");
+      let total = 0, current = 0;
+      for (let word of parts) {
+        if (smallNumbers[word] !== undefined) current += smallNumbers[word];
+        else if (tens[word] !== undefined) current += tens[word];
+        else if (hundreds[word] !== undefined) current += hundreds[word];
+        else if (thousands[word] !== undefined) { current += thousands[word]; total += current; current = 0; }
+      }
+      return total + current;
+    }
+
+    function wordsToMath(expr) {
+      let tokens = expr.split(" ");
+      let mathExpr = "";
+      let buffer = [];
+      for (let token of tokens) {
+        if (operators[token]) {
+          if (buffer.length) { mathExpr += wordsToNumber(buffer.join(" ")) || buffer.join(" "); buffer = []; }
+          mathExpr += operators[token];
+        } else buffer.push(token);
+      }
+      if (buffer.length) mathExpr += wordsToNumber(buffer.join(" ")) || buffer.join(" ");
+      return mathExpr;
+    }
+
+    function checkKnowledgeBase(userMsg) {
+      const msg = userMsg.toLowerCase().trim();
+      for (let key in knowledgeBase) {
+        if (msg.includes(key)) return knowledgeBase[key];
+      }
+      let expr = wordsToMath(msg);
+      try {
+        expr = expr.replace(/x/g, "*").replace(/÷/g, "/");
+        if (/^[0-9+\-*/().\s]+$/.test(expr)) {
+          const result = eval(expr);
+          return `${userMsg} = ${result} ✅`;
+        }
+      } catch (e) { return null; }
+      return null;
+    }
+
+    function addMessage(text, sender) {
+      const div = document.createElement("div");
+      div.className = "msg " + sender;
+      div.textContent = text;
+      messagesDiv.appendChild(div);
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+      addMessage(text, "user");
+      input.value = "";
+
+      const kbAnswer = checkKnowledgeBase(text);
+      if (kbAnswer) {
+        addMessage(kbAnswer, "bot");
+        memory.push({ role: "user", content: text }, { role: "assistant", content: kbAnswer });
+        if (memory.length > 10) memory.splice(0, memory.length - 10);
+        return;
+      }
+
+      addMessage("⏳ جاري التفكير...", "bot");
+
+      const API_KEY = "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";
+      const url = "https://openrouter.ai/api/v1/chat/completions";
+
+      memory.push({ role: "user", content: text });
+      if (memory.length > 10) memory.splice(0, memory.length - 10);
+
+      try {
+        const response = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${API_KEY}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            model: "openai/gpt-3.5-turbo",
+            messages: [
+              { role: "system", content: "أجب دائما بوضوح وباختصار. لديك ذاكرة قصيرة من آخر 5 محادثات." },
+              ...memory
+            ]
+          })
+        });
+
+        const data = await response.json();
+        messagesDiv.lastChild.remove();
+        const aiMsg = data.choices?.[0]?.message?.content || "عذرا لم أفهم سؤالك.";
+        addMessage(aiMsg, "bot");
+
+        memory.push({ role: "assistant", content: aiMsg });
+        if (memory.length > 10) memory.splice(0, memory.length - 10);
+
+      } catch (err) {
+        messagesDiv.lastChild.remove();
+        addMessage("⚠️ حدث خطأ في الاتصال بالذكاء الاصطناعي.", "bot");
+      }
+    }
+
+    window.onload = () => {
+      addMessage("مرحبا 👋 أنا يوسف فارسي روبوت ذكاء اصطناعي، أنا هنا لخدمتك. تفضل بالسؤال.", "bot");
+    };
+  </script>
+</body>
+</html>
