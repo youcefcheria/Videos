@@ -4,83 +4,206 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🤖 روبوت يوسف فارسي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700&family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --primary-color: #1abc9c;
+      --secondary-color: #f0f0f0;
+      --background-dark: #121c2c;
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --font-color-light: #e8fdf9;
+      --glow-color: rgba(26, 188, 156, 0.4);
+      --input-bg: rgba(255, 255, 255, 0.1);
+      --danger-color: #e74c3c;
+    }
+    
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: #e8fdf9;
+      font-family: 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
+      background: #0d121c;
+      background: radial-gradient(circle at top right, #1f2738 0%, #10141f 100%);
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      flex-direction: column; /* حتى يظهر الشعار فوق المحادثة */
+      flex-direction: column;
+      color: var(--font-color-light);
+      overflow: hidden;
     }
     .logo {
-      font-size: 36px;
+      font-size: 3.5rem;
       font-weight: bold;
-      color: #1abc9c;
+      font-family: 'Cairo', 'IBM Plex Sans Arabic', sans-serif;
+      color: transparent;
+      background: linear-gradient(45deg, var(--primary-color), #2ecc71, #3498db);
+      -webkit-background-clip: text;
+      background-clip: text;
       margin-bottom: 20px;
-      text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
+      text-shadow: 0 0 15px rgba(26, 188, 156, 0.6);
+      position: relative;
+      animation: pulse 2s infinite ease-in-out;
     }
+    .logo::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+      pointer-events: none;
+      opacity: 0.8;
+      animation: glimmer 3s infinite ease-in-out;
+    }
+    
     #chat {
       width: 95%;
-      max-width: 500px;
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      max-width: 550px;
+      background: var(--card-bg);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 25px;
+      box-shadow: 0 10px 50px rgba(0,0,0,0.3), 0 0 20px var(--glow-color);
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease-in-out;
+    }
+    #chat:hover {
+      box-shadow: 0 10px 60px rgba(0,0,0,0.4), 0 0 30px var(--glow-color);
+      transform: translateY(-2px);
     }
     #messages {
       flex: 1;
       padding: 15px;
       overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      scroll-behavior: smooth;
+    }
+    #messages::-webkit-scrollbar { width: 8px; }
+    #messages::-webkit-scrollbar-thumb {
+      background-color: var(--primary-color);
+      border-radius: 10px;
+    }
+    #messages::-webkit-scrollbar-track {
+      background-color: rgba(255, 255, 255, 0.05);
     }
     .msg {
       margin: 8px;
-      padding: 10px 15px;
-      border-radius: 18px;
-      max-width: 70%;
+      padding: 12px 18px;
+      border-radius: 25px;
+      max-width: 75%;
       line-height: 1.4;
       word-break: break-word;
+      transition: all 0.3s ease-in-out;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     }
-    .user { background: #1abc9c; color: #fff; margin-left: auto; border-bottom-right-radius: 5px; }
-    .bot { background: #f0f0f0; color: #333; margin-right: auto; border-bottom-left-radius: 5px; }
+    .user { 
+      background: linear-gradient(135deg, #1abc9c, #2980b9); 
+      color: #fff; 
+      margin-left: auto; 
+      border-top-left-radius: 25px; 
+      border-bottom-left-radius: 25px;
+      border-bottom-right-radius: 8px;
+    }
+    .bot { 
+      background: linear-gradient(135deg, #2c3e50, #34495e);
+      color: var(--font-color-light); 
+      margin-right: auto; 
+      border-top-right-radius: 25px; 
+      border-bottom-right-radius: 25px;
+      border-bottom-left-radius: 8px;
+      position: relative;
+    }
+    .bot::before {
+      content: '🤖';
+      position: absolute;
+      top: -15px;
+      right: -10px;
+      font-size: 1.5em;
+      opacity: 0.5;
+      color: var(--primary-color);
+      transform: rotate(10deg);
+    }
+
     #input-area {
       display: flex;
-      border-top: 1px solid #ddd;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
     }
     #input {
       flex: 1;
       border: none;
-      padding: 12px;
-      font-size: 15px;
+      padding: 15px;
+      font-size: 16px;
       outline: none;
+      background: transparent;
+      color: var(--font-color-light);
+    }
+    #input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
     }
     button {
       border: none;
-      padding: 0 18px;
+      padding: 0 20px;
       cursor: pointer;
-      background: #1abc9c;
-      color: white;
-      font-size: 16px;
+      font-size: 18px;
+      transition: all 0.3s ease-in-out;
+      background: transparent;
+      color: var(--font-color-light);
     }
-    button:hover { background: #16a085; }
-    #clear-btn { background: #e74c3c; }
-    #clear-btn:hover { background: #c0392b; }
+    button:hover { 
+      background: rgba(255, 255, 255, 0.05);
+      transform: scale(1.05);
+    }
+    .send-btn { 
+      background: var(--primary-color);
+      color: #fff;
+    }
+    .send-btn:hover { 
+      background: #16a085;
+      transform: scale(1.05);
+    }
+    .send-btn::before {
+      content: '🚀';
+    }
+    
+    #clear-btn { 
+      background: var(--danger-color); 
+      border-radius: 0 25px 0 0;
+      color: #fff;
+    }
+    #clear-btn:hover { 
+      background: #c0392b; 
+      transform: scale(1.05);
+    }
+
+    @keyframes pulse {
+      0% { text-shadow: 0 0 15px var(--glow-color); }
+      50% { text-shadow: 0 0 25px var(--glow-color), 0 0 5px var(--primary-color); }
+      100% { text-shadow: 0 0 15px var(--glow-color); }
+    }
+    @keyframes glimmer {
+      0% { transform: scaleX(0) translateX(-100%); }
+      50% { transform: scaleX(1) translateX(0); }
+      100% { transform: scaleX(0) translateX(100%); }
+    }
   </style>
 </head>
 <body>
-  <!-- الشعار الكبير -->
   <div class="logo">فارسي يوسف</div>
 
   <div id="chat">
     <div id="messages"></div>
     <div id="input-area">
       <input id="input" type="text" placeholder="✍️ اكتب سؤالك..." />
-      <button onclick="sendMessage()">إرسال</button>
-      <button id="clear-btn" onclick="clearChat()">🗑️</button>
+      <button class="send-btn" onclick="sendMessage()">إرسال</button>
+      <button id="clear-btn" onclick="clearChat">🗑️</button>
     </div>
   </div>
 
@@ -104,7 +227,7 @@
         "🤗 مرحبا! سعيد بوجودك هنا.",
         "🌸 أهلا بك، تفضل بطرح سؤالك."
       ],
-      "اهلا": [   // تمت الإضافة هنا
+      "اهلا": [
         "👋 أهلا وسهلا! كيف حالك؟",
         "🌸 أهلا بك! سعيد بلقائك.",
         "🤖 أهلا، تفضل بطرح سؤالك."
@@ -131,7 +254,7 @@
       ],
       "ماهي قدراتك": [
         "🤖 أستطيع الإجابة على أسئلة عامة.",
-        "📚 أبحث في ويكيبيديا وأقدم لك المعلومات.",
+        "📚 أبحث في مصادر متعددة وأقدم لك المعلومات.",
         "💡 أساعدك بالمعلومات الأساسية والمعرفة العامة."
       ],
       "متى تمت برمجتك": [
@@ -160,12 +283,27 @@
 
     let memory = [];
 
-    function addMessage(text, sender) {
+    // كتابة حرف بحرف
+    function typeMessage(text, sender) {
       const div = document.createElement("div");
       div.className = "msg " + sender;
-      div.textContent = text;
       messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+      let i = 0;
+      function typing() {
+        if (i < text.length) {
+          div.textContent += text.charAt(i);
+          i++;
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+          setTimeout(typing, 35);
+        }
+      }
+      typing();
+    }
+
+    function addMessage(text, sender) {
+      typeMessage(text, sender);
     }
 
     function clearChat() {
@@ -243,7 +381,7 @@
       }
 
       if (wikiAnswer) {
-        addMessage("📖 " + wikiAnswer, "bot");
+        addMessage("🤖 " + wikiAnswer, "bot");
         memory.push({ role: "assistant", content: wikiAnswer });
       } else {
         const fallback = "🤔 لا أستطيع الإجابة على هذا السؤال حاليا. هل يمكنك إعادة صياغة السؤال أو توضيح المطلوب؟";
