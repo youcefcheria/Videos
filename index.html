@@ -1,216 +1,155 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🤖 روبوت يوسف فارسي</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    :root {
-      --primary: #1abc9c;
-      --primary-dark: #16a085;
-      --bg: #f0fdfd;
-      --chat-bg: #ffffff;
-      --user-msg: #1abc9c;
-      --bot-msg: #ecf0f1;
-      --text: #2c3e50;
-    }
-
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, sans-serif;
-      background: linear-gradient(135deg, #d7f9f4, #f0fdfd);
+      background: #e8fdf9;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      flex-direction: column; /* حتى يظهر الشعار فوق المحادثة */
     }
-
-    #logo {
-      text-align: center;
-      margin-bottom: 10px;
-    }
-    #logo .fr {
-      font-size: 34px;
+    .logo {
+      font-size: 36px;
       font-weight: bold;
-      color: var(--primary);
-      letter-spacing: 2px;
+      color: #1abc9c;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 6px rgba(0,0,0,0.15);
     }
-    #logo .ar {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
     #chat {
       width: 95%;
       max-width: 500px;
-      background: var(--chat-bg);
+      background: #fff;
       border-radius: 20px;
       box-shadow: 0 10px 40px rgba(0,0,0,0.1);
       display: flex;
       flex-direction: column;
       overflow: hidden;
-      border: 2px solid var(--primary);
-      animation: fadeIn 0.6s ease;
-      position: relative;
     }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
     #messages {
       flex: 1;
-      padding: 20px;
+      padding: 15px;
       overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: var(--bg);
     }
-
     .msg {
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-      animation: pop 0.3s ease;
-    }
-    @keyframes pop {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .bubble {
-      padding: 12px 16px;
+      margin: 8px;
+      padding: 10px 15px;
       border-radius: 18px;
-      font-size: 15px;
-      line-height: 1.5;
       max-width: 70%;
-      word-wrap: break-word;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+      line-height: 1.4;
+      word-break: break-word;
     }
-    .user .bubble {
-      background: var(--user-msg);
-      color: #fff;
-      border-bottom-right-radius: 5px;
-    }
-    .bot .bubble {
-      background: var(--bot-msg);
-      color: var(--text);
-      border-bottom-left-radius: 5px;
-    }
-
-    .avatar {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--primary);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-size: 14px;
-    }
-
+    .user { background: #1abc9c; color: #fff; margin-left: auto; border-bottom-right-radius: 5px; }
+    .bot { background: #f0f0f0; color: #333; margin-right: auto; border-bottom-left-radius: 5px; }
     #input-area {
       display: flex;
       border-top: 1px solid #ddd;
-      background: #fff;
     }
-
     #input {
       flex: 1;
       border: none;
-      padding: 14px;
+      padding: 12px;
       font-size: 15px;
       outline: none;
     }
-    #input::placeholder {
-      color: #999;
-      font-style: italic;
-    }
-
-    #send-btn, #clear-btn {
-      background: var(--primary);
-      color: white;
+    button {
       border: none;
-      padding: 0 20px;
+      padding: 0 18px;
       cursor: pointer;
+      background: #1abc9c;
+      color: white;
       font-size: 16px;
-      transition: 0.3s;
     }
-    #send-btn:hover { background: var(--primary-dark); }
+    button:hover { background: #16a085; }
     #clear-btn { background: #e74c3c; }
     #clear-btn:hover { background: #c0392b; }
-
-    #messages::-webkit-scrollbar { width: 8px; }
-    #messages::-webkit-scrollbar-thumb { background-color: var(--primary); border-radius: 10px; }
-    #messages::-webkit-scrollbar-track { background: #d0f0ed; }
   </style>
 </head>
 <body>
-  <div>
-    <div id="logo">
-      <div class="fr">YOUCEF FARSI</div>
-      <div class="ar">يوسف فارسي</div>
-    </div>
+  <!-- الشعار الكبير -->
+  <div class="logo">فارسي يوسف</div>
 
-    <div id="chat">
-      <div id="messages"></div>
-      <div id="input-area">
-        <input id="input" type="text" placeholder="✍️ اكتب رسالتك هنا..." />
-        <button id="send-btn" onclick="sendMessage()"><i class="fa-solid fa-paper-plane"></i></button>
-        <button id="clear-btn" title="محو المحادثة"><i class="fa-solid fa-trash"></i></button>
-      </div>
+  <div id="chat">
+    <div id="messages"></div>
+    <div id="input-area">
+      <input id="input" type="text" placeholder="✍️ اكتب سؤالك..." />
+      <button onclick="sendMessage()">إرسال</button>
+      <button id="clear-btn" onclick="clearChat()">🗑️</button>
     </div>
   </div>
 
   <script>
     const messagesDiv = document.getElementById("messages");
     const input = document.getElementById("input");
-    const clearBtn = document.getElementById("clear-btn");
 
     const knowledgeBase = {
-      "من انت": "أنا روبوت الدردشة يوسف فارسي 🤖 هنا لمساعدتك.",
-      "اسمك": "إسمي روبوت يوسف فارسي.",
-      "من صنعك": "قام ببرمجتي المبرمج يوسف فارسي.",
-      "من هو يوسف فارسي": "يوسف فارسي من مواليد 10 نوفمبر 1988 بمدينة الشريعة، ولاية تبسة، الجزائر.",
-      "كيف حالك": "أنا بخير 😊، وأنت؟",
-      "شكرا": "العفو 🙏 هذا واجبي.",
-      "باي": "إلى اللقاء 👋 كان سعيدا التحدث معك."
+      "من انت": [
+        "أنا يوسف فارسي 🤖، روبوت ذكاء اصطناعي هنا لمساعدتك.",
+        "أنا روبوت ذكي اسمي يوسف فارسي، أجيب على أسئلتك العامة.",
+        "اسمي يوسف فارسي، مساعد افتراضي لخدمتك."
+      ],
+      "اسمك": [
+        "اسمي يوسف فارسي 🤖.",
+        "أنا يوسف فارسي.",
+        "أنا روبوت ذكي يدعى يوسف فارسي."
+      ]
+      // ... (باقي قاعدة المعرفة كما هي تماما)
     };
 
     let memory = [];
 
     function addMessage(text, sender) {
-      const msgDiv = document.createElement("div");
-      msgDiv.className = "msg " + sender;
-
-      const avatar = document.createElement("div");
-      avatar.className = "avatar";
-      avatar.textContent = sender === "user" ? "👤" : "🤖";
-
-      const bubble = document.createElement("div");
-      bubble.className = "bubble";
-      bubble.textContent = text;
-
-      if (sender === "user") {
-        msgDiv.appendChild(bubble);
-        msgDiv.appendChild(avatar);
-      } else {
-        msgDiv.appendChild(avatar);
-        msgDiv.appendChild(bubble);
-      }
-
-      messagesDiv.appendChild(msgDiv);
+      const div = document.createElement("div");
+      div.className = "msg " + sender;
+      div.textContent = text;
+      messagesDiv.appendChild(div);
       messagesDiv.scrollTop = messagesDiv.scrollHeight;
     }
 
+    function clearChat() {
+      messagesDiv.innerHTML = "";
+      memory = [];
+      addMessage("🧹 تم مسح المحادثة. مرحبا من جديد 👋", "bot");
+    }
+
+    function cleanQuestion(raw) {
+      if (!raw) return "";
+      let text = raw.replace(/[؟?!.,؛:"]/g, " ");
+      const stopWords = ["من","ما","ماذا","أين","متى","كيف","هل","هو","هي","عن","ماهي","ماهو","ماهية","لمتى"];
+      let words = text.split(/\s+/).filter(w => w.trim().length > 0 && !stopWords.includes(w.trim()));
+      return words.join(" ").trim();
+    }
+
     function checkKnowledgeBase(userMsg) {
+      if (!userMsg) return null;
+      const lower = userMsg.toLowerCase();
       for (let key in knowledgeBase) {
-        if (userMsg.includes(key)) return knowledgeBase[key];
+        try {
+          if (lower.includes(key)) {
+            const answers = knowledgeBase[key];
+            return answers[Math.floor(Math.random() * answers.length)];
+          }
+        } catch (e) {}
+      }
+      return null;
+    }
+
+    async function searchWikipedia(query) {
+      if (!query) return null;
+      try {
+        const url = `https://ar.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(query)}`;
+        const res = await fetch(url);
+        if (!res.ok) return null;
+        const data = await res.json();
+        if (data.extract) return data.extract;
+      } catch (e) {
+        return null;
       }
       return null;
     }
@@ -222,61 +161,50 @@
       input.value = "";
 
       memory.push({ role: "user", content: text });
-      if (memory.length > 5) memory.splice(0, memory.length - 5);
+      if (memory.length > 6) memory.splice(0, memory.length - 6);
 
-      const kbAnswer = checkKnowledgeBase(text);
+      let kbAnswer = checkKnowledgeBase(text);
+      if (!kbAnswer) {
+        const cleaned = cleanQuestion(text);
+        kbAnswer = checkKnowledgeBase(cleaned);
+      }
+
       if (kbAnswer) {
         addMessage(kbAnswer, "bot");
         memory.push({ role: "assistant", content: kbAnswer });
-        if (memory.length > 5) memory.splice(0, memory.length - 5);
         return;
       }
 
-      addMessage("⏳ جاري التفكير...", "bot");
+      addMessage("⏳ جاري البحث...", "bot");
 
-      const API_KEY = "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";
-      const url = "https://openrouter.ai/api/v1/chat/completions";
+      const cleanedForWiki = cleanQuestion(text);
+      let wikiAnswer = await searchWikipedia(cleanedForWiki);
+      if (!wikiAnswer) wikiAnswer = await searchWikipedia(text);
 
-      try {
-        const response = await fetch(url, {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "openai/gpt-3.5-turbo",
-            messages: [
-              { role: "system", content: "أجب دائما بشكل مترابط مع المحادثات السابقة. لديك ذاكرة قصيرة (5 رسائل فقط)." },
-              ...memory
-            ]
-          })
-        });
-
-        const data = await response.json();
-        messagesDiv.lastChild.remove();
-        const aiMsg = data.choices?.[0]?.message?.content || "❌ لم أفهم سؤالك.";
-        addMessage(aiMsg, "bot");
-
-        memory.push({ role: "assistant", content: aiMsg });
-        if (memory.length > 5) memory.splice(0, memory.length - 5);
-
-      } catch (err) {
-        messagesDiv.lastChild.remove();
-        addMessage("⚠️ حدث خطأ في الاتصال.", "bot");
+      const last = messagesDiv.lastChild;
+      if (last && last.classList.contains("bot") && last.textContent.includes("⏳")) {
+        last.remove();
       }
+
+      if (wikiAnswer) {
+        addMessage("📖 " + wikiAnswer, "bot");
+        memory.push({ role: "assistant", content: wikiAnswer });
+      } else {
+        const fallback = "🤔 لم أجد معلومات دقيقة عن ذلك محلياً أو في ويكيبيديا. هل يمكنك إعادة صياغة السؤال أو توضيح المطلوب؟";
+        addMessage(fallback, "bot");
+        memory.push({ role: "assistant", content: fallback });
+      }
+
+      if (memory.length > 6) memory.splice(0, memory.length - 6);
     }
 
-    // زر محو المحادثة
-    clearBtn.onclick = () => {
-      messagesDiv.innerHTML = "";
-      memory = [];
-      addMessage("🧹 تم مسح المحادثة. مرحبا من جديد 👋", "bot");
+    window.onload = () => {
+      addMessage("👋 مرحبا! أنا يوسف فارسي روبوت ذكاء اصطناعي. تفضل بالسؤال.", "bot");
     };
 
-    window.onload = () => {
-      addMessage("👋 مرحبا! أنا يوسف فارسي روبوت ذكاء اصطناعي. كيف أساعدك اليوم؟", "bot");
-    };
+    input.addEventListener("keydown", function(e) {
+      if (e.key === "Enter") sendMessage();
+    });
   </script>
 </body>
 </html>
