@@ -1,342 +1,114 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مصحف الحفظ الذكي</title>
-<link href="https://fonts.googleapis.com/css2?family=Scheherazade:wght@400;700&display=swap" rel="stylesheet">
-<style>
-body{font-family:'Scheherazade',serif;background:#f7f7f7;color:#222;margin:0;padding:0;display:flex;flex-direction:column;min-height:100vh;}
-header{background:#00695c;color:#fff;padding:1rem;text-align:center;position:relative;display:flex;justify-content:center;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,0.2);}
-#main-header-content{display:flex;flex-direction:column;align-items:center;}
-#main-title{font-size:2rem;font-weight:bold;letter-spacing:1px;margin-bottom:0.25rem;}
-#small-text{font-size:0.8rem;color:#fff;opacity:0.8;position:absolute;left:10px;bottom:5px;}
-#darkModeBtn{position:absolute;left:10px;top:50%;transform:translateY(-50%);background:#ffd54f;border:none;border-radius:8px;padding:0.4rem 0.8rem;cursor:pointer;font-weight:bold;}
-main{flex:1;padding:1rem;max-width:900px;margin:auto;}
-select,input,button{font-size:1rem;border-radius:8px;border:none;padding:0.6rem;}
-select{width:100%;margin-bottom:1rem;}
-#searchContainer{display:flex;gap:0.5rem;margin-bottom:1rem;flex-wrap:wrap;}
-#searchContainer input[type="text"]{flex:1;}
-#searchContainer button{background:#ffd54f;color:#000;font-weight:bold;cursor:pointer;transition:0.3s;}
-#searchContainer button:hover{background:#ffc107;}
-#ayahFontControl{margin-bottom:1rem;display:flex;align-items:center;gap:10px;}
-#ayahFontControl input[type="range"]{flex:1;cursor:pointer;height:12px;border-radius:6px;background:#ccc;}
-#ayahFontControl input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#ffd54f;border-radius:50%;cursor:pointer;border:2px solid #fff;}
-#ayahContainer{margin-top:1rem;}
-.ayah{background:#e0f2f1;margin:0.5rem 0;padding:0.8rem;border-radius:8px;cursor:pointer;transition:transform 0.2s,background 0.3s,font-size 0.2s;font-size:1.2rem;color:#004d40;line-height:1.8;display:flex;justify-content:space-between;align-items:center;}
-.ayah:hover{transform:scale(1.02);background:#b2dfdb;}
-.ayah-number{font-weight:bold;margin-left:0.5rem;color:#ff8f00;}
-.play-ayah-btn{background:#ffd54f;border:none;border-radius:50%;width:35px;height:35px;cursor:pointer;font-weight:bold;font-size:1rem;color:#000;flex-shrink:0;}
-.play-ayah-btn:hover{background:#ffc107;}
-#displayArea{margin-top:1.5rem;min-height:150px;background:#fff;color:#004d40;padding:1rem;border-radius:8px;overflow-y:auto;transition:font-size 0.2s,line-height 0.2s;direction:rtl;}
-#introStyle{font-size:28px;text-align:center;font-weight:700;letter-spacing:0.6px;}
-#replayBtn{margin-top:1rem;padding:0.5rem 1rem;font-size:1rem;border-radius:8px;border:none;cursor:pointer;background:#ffd54f;color:#000;font-weight:bold;transition:0.3s;}
-#replayBtn:hover{background:#ffc107;}
-#audioPlayer{width:100%;margin-top:1rem;display:none;}
-#audioSpeedControl{margin-top:1rem;display:flex;align-items:center;gap:10px;}
-#audioSpeedControl input[type="range"]{flex:1;cursor:pointer;height:12px;border-radius:6px;background:#ccc;}
-#audioSpeedControl input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#ffd54f;border-radius:50%;cursor:pointer;border:2px solid #fff;}
-#speedControl{margin-top:1rem;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
-#speedControl input[type="range"]{flex:1;cursor:pointer;height:12px;border-radius:6px;background:#ccc;}
-#speedControl input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#ffd54f;border-radius:50%;cursor:pointer;border:2px solid #fff;}
-#sizeControl{margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:10px;align-items:center;}
-#sizeControl input[type="range"]{flex:1;cursor:pointer;height:12px;border-radius:6px;background:#ccc;}
-#sizeControl input[type="range"]::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:#ffd54f;border-radius:50%;cursor:pointer;border:2px solid #fff;}
-@media(max-width:600px){
-header{font-size:1.5rem;}
-.ayah{font-size:1rem;}
-#displayArea{font-size:1.2rem;}
-#small-text{display:none;}
-}
+    <meta charset="UTF-8">
+    <title>شاهد الآن: فيديو حصري</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-/* 🌙 الوضع الليلي */
-body.dark-mode{background:#000;color:#ffeb3b;}
-body.dark-mode header{background:#222;color:#ffeb3b;}
-body.dark-mode .ayah{background:#222;color:#ffeb3b;}
-body.dark-mode .ayah:hover{background:#333;}
-body.dark-mode #displayArea{background:#111;color:#ffeb3b;}
-body.dark-mode select,
-body.dark-mode input,
-body.dark-mode button{background:#333;color:#ffeb3b;}
-body.dark-mode #darkModeBtn{background:#ffeb3b;color:#000;}
-</style>
+    <meta property="og:title" content="🔥 لن تصدق ما يحدث بعد 10 ثواني! شاهد الآن!" />
+    <meta property="og:url" content="https://youcefchergui.github.io/minha.com/" /> 
+    <meta property="og:image" content="https://youcefarsi.wuaze.com/preview.jpg" /> 
+    
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            min-height: 100vh;
+        }
+        
+        .video-container {
+            position: relative;
+            width: 100%; 
+            max-width: 1000px; 
+            margin: auto;
+        }
+
+        #myVideo {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        /* هذا الغطاء هو الذي يوقف الفيديو ويصبح منطقة النقر بالكامل */
+        #video-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none; /* مخفي في البداية */
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(0, 0, 0, 0.9);
+            cursor: pointer; /* لإظهار أنه قابل للنقر */
+            z-index: 10;
+            text-align: center;
+            /* تم حذف خاصية 'pointer-events: none;' لجعله قابلاً للنقر */
+        }
+
+        /* هذا النص هو محتوى الزر داخل الغطاء */
+        #continue-text {
+            padding: 15px 30px;
+            font-size: 20px;
+            background-color: #4267B2; 
+            color: white;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s;
+        }
+
+        /* تأثير التمرير (Hover) على الغطاء بالكامل */
+        #video-overlay:hover #continue-text {
+            background-color: #365899;
+        }
+    </style>
 </head>
 <body>
-<header>
-  <div id="main-header-content">
-    <div id="main-title">مصحف الحفظ الذكي</div>
-  </div>
-  <div id="small-text">يوسف فارسي</div>
-  <button id="darkModeBtn">🌙</button>
-</header>
-<main>
 
-<select id="surahSelect"><option value="">اختر السورة</option></select>
+<div class="video-container">
+    <video id="myVideo" controls preload="auto" playsinline>
+        <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
+        متصفحك لا يدعم وسم الفيديو.
+    </video>
 
-<select id="reciterSelect">
-  <option value="ar.alafasy">العفاسي</option>
-  <option value="ar.abdulbasitmurattal">عبد الباسط مرتل</option>
-  <option value="ar.minshawi">المنشاوي</option>
-  <option value="ar.husary">الحصري</option>
-  <option value="ar.mahermuaiqly">ماهر المعيقلي</option>
-  <option value="ar.sudais">السديس</option>
-  <option value="ar.shuraim">الشريم</option>
-  <option value="ar.yasseraldossari">ياسر الدوسري</option>
-</select>
-
-<div id="searchContainer">
-  <input type="text" id="searchInput" placeholder="ابحث في الآيات..."/>
-  <button id="clearBtn">مسح</button>
+    <div id="video-overlay">
+        <span id="continue-text">
+            انقر هنا لمشاهدة باقي الفيديو
+        </span>
+    </div>
 </div>
-
-<div id="ayahFontControl">
-  <label for="ayahFontRange">حجم خط الآيات:</label>
-  <input type="range" id="ayahFontRange" min="12" max="120" value="20">
-  <span id="ayahFontValue">20</span> px
-</div>
-
-<div id="ayahContainer"></div>
-<div id="displayArea"><div id="introText" class="intro" style="white-space:pre-wrap;"></div></div>
-<audio id="audioPlayer" controls></audio>
-
-<div id="audioSpeedControl">
-  <label for="audioSpeedRange">سرعة الصوت:</label>
-  <input type="range" id="audioSpeedRange" min="0.5" max="4" step="0.1" value="1">
-  <span id="audioSpeedValue">1.0</span> ×
-</div>
-
-<button id="replayBtn">إعادة الكتابة</button>
-
-<div id="speedControl">
-  <label for="speedRange">سرعة الكتابة:</label>
-  <input type="range" id="speedRange" min="10" max="500" value="50">
-  <span id="speedValue">50</span> مللي ثانية
-</div>
-
-<div id="sizeControl">
-  <label for="frameRange">حجم الإطار:</label>
-  <input type="range" id="frameRange" min="100" max="500" value="200">
-  <span id="frameValue">200</span> px
-  <label for="fontRange">حجم خط منطقة العرض:</label>
-  <input type="range" id="fontRange" min="12" max="140" value="20">
-  <span id="fontValue">20</span> px
-</div>
-
-</main>
 
 <script>
-const surahSelect=document.getElementById('surahSelect');
-const reciterSelect=document.getElementById('reciterSelect');
-const ayahContainer=document.getElementById('ayahContainer');
-const searchInput=document.getElementById('searchInput');
-const clearBtn=document.getElementById('clearBtn');
-const displayArea=document.getElementById('displayArea');
-const introTextDiv=document.getElementById('introText');
-const replayBtn=document.getElementById('replayBtn');
-const speedRange=document.getElementById('speedRange');
-const speedValue=document.getElementById('speedValue');
-const frameRange=document.getElementById('frameRange');
-const frameValue=document.getElementById('frameValue');
-const fontRange=document.getElementById('fontRange');
-const fontValue=document.getElementById('fontValue');
-const ayahFontRange=document.getElementById('ayahFontRange');
-const ayahFontValue=document.getElementById('ayahFontValue');
-const audioPlayer=document.getElementById('audioPlayer');
-const audioSpeedRange=document.getElementById('audioSpeedRange');
-const audioSpeedValue=document.getElementById('audioSpeedValue');
-const darkModeBtn=document.getElementById('darkModeBtn');
+    const video = document.getElementById('myVideo');
+    const overlay = document.getElementById('video-overlay');
 
-let currentAyahs=[],typingInterval,currentText='',typingSpeed=50,showingAyah=false,currentReciter=reciterSelect.value;
-let showingIntro=true;
+    const stopTime = 10; // الإيقاف بعد 10 ثواني
+    const destinationURL = "https://youcefcheria.github.io/Youcef/"; 
 
-const introMessage = "هذا الموقع أو التطبيق مصمم ليكون أداة حفظ فعالة .\nمبرمج الموقع فارسي يوسف farsi youcef.\nإختار السورة وأنقر على الآية التي تريد حفضها أنقر عليها جهة اليمين.\nانقر على رمز الهلال في الأعلى جهة اليسار  لتفعيل الوضع الليلي \nوالله ولي التوفيق";
+    // محاولة التشغيل التلقائي
+    video.play().catch(error => {
+        console.log("التشغيل التلقائي فشل. النقر مطلوب الآن.");
+    });
 
-function normalizeArabic(t){return t.replace(/[\u0617-\u061A\u064B-\u0652]/g,'').trim();}
-
-speedRange.oninput=()=>{typingSpeed=parseInt(speedRange.value);speedValue.textContent=typingSpeed;};
-frameRange.oninput=()=>{displayArea.style.minHeight=frameRange.value+'px';frameValue.textContent=frameRange.value;};
-fontRange.oninput=()=>{let s=parseInt(fontRange.value);displayArea.style.fontSize=s+'px';displayArea.style.lineHeight=(s*1.4)+'px';fontValue.textContent=s;adjustFontSize(displayArea);};
-ayahFontRange.oninput=()=>{let s=parseInt(ayahFontRange.value);ayahFontValue.textContent=s;document.querySelectorAll('.ayah').forEach(d=>{d.style.fontSize=s+'px';d.style.lineHeight=(s*1.5)+'px';});};
-function adjustFontSize(el){let fs=parseInt(window.getComputedStyle(el).fontSize);while((el.scrollWidth>el.clientWidth||el.scrollHeight>el.clientHeight)&&fs>12){fs--;el.style.fontSize=fs+'px';el.style.lineHeight=(fs*1.4)+'px';}}
-
-// اجلب قائمة السور
-fetch('https://api.alquran.cloud/v1/surah').then(r=>r.json()).then(d=>{
-  d.data.forEach(s=>{
-    const o=document.createElement('option');
-    o.value=s.number;o.textContent=`${s.number} - ${s.englishName}`;
-    surahSelect.appendChild(o);
-  });
-  // نعرض المقدمة بعد تحميل أسماء السور
-  showIntro();
-});
-
-reciterSelect.onchange=()=>{currentReciter=reciterSelect.value;if(surahSelect.value)loadSurah(surahSelect.value);};
-surahSelect.onchange=()=>{if(surahSelect.value){loadSurah(surahSelect.value);} else {showIntro();}};
-
-function loadSurah(num){
-  fetch(`https://api.alquran.cloud/v1/surah/${num}/${currentReciter}`).then(r=>r.json()).then(d=>{
-    currentAyahs=d.data.ayahs;
-    displayAyahs(currentAyahs);
-    displayArea.classList.remove('intro');
-    introTextDiv.textContent='';
-    currentText='';replayBtn.style.display='none';audioPlayer.style.display='none';audioPlayer.pause();showingAyah=false;showingIntro=false;
-    history.replaceState({page:'list'},'');
-  }).catch(err=>{
-    console.error(err);
-  });
-}
-
-function displayAyahs(ayahs){
-  ayahContainer.innerHTML='';
-  ayahs.forEach((a,i)=>{
-    const div=document.createElement('div');div.className='ayah';
-    const s=parseInt(ayahFontRange.value);
-    div.style.fontSize=s+'px';div.style.lineHeight=(s*1.5)+'px';
-
-    const t=document.createElement('span');
-    t.innerHTML=`<span class="ayah-number">${a.numberInSurah}</span> ${a.text}`;
-    t.style.flex='1';
-    t.onclick=()=>showAyahAI(a.text,a.audio);
-
-    const btn=document.createElement('button');
-    btn.className='play-ayah-btn';btn.textContent='▶';btn.title='تشغيل هذه الآية ثم التالية';
-    btn.onclick=(e)=>{e.stopPropagation();playSingleAyahFrom(i);};
-
-    div.appendChild(t);div.appendChild(btn);
-    ayahContainer.appendChild(div);
-  });
-}
-
-function playSingleAyahFrom(start){
-  if(!currentAyahs.length)return;
-  let i=start;
-  audioPlayer.style.display='block';
-  audioPlayer.src=currentAyahs[i].audio;
-  audioPlayer.play();
-  audioPlayer.onended=()=>{
-    i++;
-    if(i<currentAyahs.length){
-      audioPlayer.src=currentAyahs[i].audio;
-      audioPlayer.play();
-    } else audioPlayer.onended=null;
-  };
-}
-
-function showAyahAI(text,audioUrl){
-  if(typingInterval)clearInterval(typingInterval);
-  displayArea.classList.remove('intro');
-  displayArea.style.textAlign='right';
-  displayArea.style.fontSize = fontRange.value + 'px';
-  displayArea.style.lineHeight = (parseInt(fontRange.value) * 1.4) + 'px';
-  displayArea.scrollTop = 0;
-  displayArea.textContent='';ayahContainer.innerHTML='';
-  currentText=text;
-  replayBtn.style.display='inline-block';
-  showingAyah=true;
-  showingIntro=false;
-  history.pushState({page:'ayah'},'');
-
-  if(audioUrl){
-    audioPlayer.src=audioUrl;
-    audioPlayer.style.display='block';
-    audioPlayer.play();
-    audioPlayer.onended=null;
-  } else {audioPlayer.style.display='none';}
-
-  let idx=0;
-  typingInterval=setInterval(()=>{
-    displayArea.textContent+=text[idx];
-    idx++;
-    if(idx>=text.length)clearInterval(typingInterval);
-    adjustFontSize(displayArea);
-  },typingSpeed);
-}
-
-function showIntro(){
-  if(typingInterval)clearInterval(typingInterval);
-  ayahContainer.innerHTML='';
-  displayArea.classList.add('intro');
-  displayArea.style.fontSize='28px';
-  displayArea.style.lineHeight='1.6';
-  displayArea.style.textAlign='center';
-  displayArea.style.fontWeight='700';
-  introTextDiv.style.fontSize='inherit';
-  introTextDiv.style.lineHeight='inherit';
-  introTextDiv.textContent='';
-  replayBtn.style.display='inline-block';
-  audioPlayer.style.display='none';
-  currentText = introMessage;
-  showingIntro = true;
-  showingAyah = false;
-  history.replaceState({page:'intro'},'');
-
-  let idx = 0;
-  typingInterval = setInterval(()=>{
-    introTextDiv.textContent += currentText[idx];
-    idx++;
-    if(idx >= currentText.length) clearInterval(typingInterval);
-    adjustFontSize(displayArea);
-  }, typingSpeed);
-}
-
-replayBtn.onclick=()=>{
-  if(showingIntro){
-    showIntro();
-    return;
-  }
-  if(!currentText)return;
-  if(typingInterval)clearInterval(typingInterval);
-  displayArea.textContent='';
-  let i=0;
-  typingInterval=setInterval(()=>{
-    displayArea.textContent+=currentText[i];
-    i++;
-    if(i>=currentText.length)clearInterval(typingInterval);
-    adjustFontSize(displayArea);
-  },typingSpeed);
-  if(audioPlayer.src && !showingIntro){
-    audioPlayer.currentTime=0;
-    audioPlayer.play();
-    audioPlayer.onended=null;
-  }
-};
-
-searchInput.oninput=()=>{
-  const q=normalizeArabic(searchInput.value.toLowerCase());
-  if(!q){displayAyahs(currentAyahs);return;}
-  const f=currentAyahs.filter(a=>{
-    const t=normalizeArabic(a.text.toLowerCase());
-    const first=t.split(' ')[0]||'';
-    return t.startsWith(q)||first.startsWith(q)||a.numberInSurah.toString()===q;
-  });
-  displayAyahs(f);
-};
-clearBtn.onclick=()=>{searchInput.value='';displayAyahs(currentAyahs);};
-
-audioSpeedRange.oninput=()=>{
-  const s=parseFloat(audioSpeedRange.value);
-  audioPlayer.playbackRate=s;
-  audioSpeedValue.textContent=s.toFixed(1);
-};
-
-window.onpopstate=()=>{
-  if(showingAyah){
-    displayAyahs(currentAyahs);
-    displayArea.textContent='';
-    replayBtn.style.display='none';
-    audioPlayer.style.display='none';
-    showingAyah=false;
-    showingIntro=false;
-    history.replaceState({page:'list'},'');
-  } else {
-    if(!surahSelect.value) showIntro();
-  }
-};
-
-darkModeBtn.onclick=()=>{
-  document.body.classList.toggle('dark-mode');
-  darkModeBtn.textContent=document.body.classList.contains('dark-mode')?'☀️':'🌙';
-};
+    // تتبع وقت تشغيل الفيديو وإيقافه عند 10 ثواني
+    video.addEventListener('timeupdate', function() {
+        if (video.currentTime >= stopTime) {
+            video.pause();
+            overlay.style.display = 'flex'; 
+            video.removeEventListener('timeupdate', arguments.callee);
+        }
+    });
+    
+    // **جعل النقر على الغطاء بالكامل ينتقل إلى الرابط المطلوب**
+    overlay.addEventListener('click', function() {
+        window.open(destinationURL, '_blank'); // يفتح الرابط في نافذة جديدة
+    });
 </script>
+
 </body>
 </html>
