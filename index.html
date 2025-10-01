@@ -5,11 +5,15 @@
     <title>شاهد الآن: فيديو حصري</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta property="og:title" content="🔥 لن تصدق ما يحدث بعد 10 ثواني! شاهد الآن!" />
+    <meta property="og:title" content="🔥 شاهد الفيديو المثير!" />
     <meta property="og:url" content="https://youcefchergui.github.io/minha.com/" /> 
     <meta property="og:image" content="https://youcefarsi.wuaze.com/preview.jpg" /> 
+
+    <meta property="og:description" content=" " /> 
+    <meta name="description" content=" " /> 
     
     <style>
+        /* ... (بقية تنسيقات CSS كما هي) ... */
         body, html {
             margin: 0;
             padding: 0;
@@ -33,7 +37,7 @@
             display: block;
         }
         
-        /* هذا الغطاء هو الذي يوقف الفيديو ويصبح منطقة النقر بالكامل */
+        /* هذا الغطاء (Overlay) يوقف الفيديو ويصبح منطقة النقر بالكامل */
         #video-overlay {
             position: absolute;
             top: 0;
@@ -47,7 +51,6 @@
             cursor: pointer; /* لإظهار أنه قابل للنقر */
             z-index: 10;
             text-align: center;
-            /* تم حذف خاصية 'pointer-events: none;' لجعله قابلاً للنقر */
         }
 
         /* هذا النص هو محتوى الزر داخل الغطاء */
@@ -69,7 +72,7 @@
     </style>
 </head>
 <body>
-
+    
 <div class="video-container">
     <video id="myVideo" controls preload="auto" playsinline>
         <source src="http://media.w3.org/2010/05/sintel/trailer.mp4" type="video/mp4">
@@ -78,7 +81,7 @@
 
     <div id="video-overlay">
         <span id="continue-text">
-            انقر هنا لمشاهدة باقي الفيديو
+            شاهد الفيديو المثير! انقر هنا للمتابعة
         </span>
     </div>
 </div>
@@ -104,7 +107,7 @@
         }
     });
     
-    // **جعل النقر على الغطاء بالكامل ينتقل إلى الرابط المطلوب**
+    // جعل النقر على الغطاء بالكامل ينتقل إلى الرابط المطلوب
     overlay.addEventListener('click', function() {
         window.open(destinationURL, '_blank'); // يفتح الرابط في نافذة جديدة
     });
