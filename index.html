@@ -1,222 +1,170 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <title>شاهد الآن: فيديو حصري</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>فيديو حصري</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body, html {margin:0; padding:0; background:#000; height:100%; width:100%;}
+.video-container {position:relative; width:100%; height:100vh;}
 
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            background-color: #000;
-            height: 100%;
-            width: 100%;
-        }
-        
-        .video-container {
-            position: relative;
-            width: 100%; 
-            height: 100vh; /* يغطي كامل الشاشة */
-        }
+/* النصوص فوق الزر */
+#loading-text, #loaded-text {
+    position: absolute;
+    top: 38%; /* أعلى قليلاً من منتصف الشاشة */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 16;
+    text-align: center;
+    transition: color 0.5s ease, opacity 0.5s ease;
+}
 
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        
-        #video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: none; 
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 10;
-            text-align: center;
-        }
+/* النص أثناء التحميل */
+#loading-text {
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+}
 
-        #overlay-message {
-            color: white;
-            font-size: 22px;
-            margin-bottom: 20px;
-            font-weight: bold;
-        }
+/* النص بعد اكتمال التحميل مع وميض وتكبير خفيف */
+#loaded-text {
+    display: none;
+    color: #3498db; /* أزرق */
+    font-size: 18px; /* أكبر */
+    font-weight: bold;
+    animation: blinkScale 1s infinite; /* وميض + تكبير */
+}
 
-        #continue-text {
-            padding: 12px 25px;
-            font-size: 18px;
-            background-color: #4267B2; 
-            color: white;
-            border-radius: 6px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-            transition: background-color 0.3s;
-        }
+@keyframes blinkScale {
+    0%, 100% {color: #3498db; transform: translate(-50%, -50%) scale(1);}
+    50% {color: #85c1e9; transform: translate(-50%, -50%) scale(1.2);} /* أزرق فاتح + تكبير 20% */
+}
 
-        #continue-text:hover {
-            background-color: #365899;
-        }
+#progress-bar-container {
+    position:absolute; top:30px; left:10%; width:80%; height:6px; background:#333; border-radius:3px; z-index:16;
+}
+#progress-bar {width:0%; height:100%; background:#00bfa5; border-radius:3px;}
 
-        /* زر التشغيل الأخضر المزرق */
-        #custom-play {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 80px;
-            height: 80px;
-            background-color: #00bfa5; /* أخضر مزرق */
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            z-index: 11;
-        }
+#custom-play {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:80px; height:80px; background-color:#00bfa5; border-radius:50%;
+    display:flex; justify-content:center; align-items:center; cursor:not-allowed; z-index:11;
+    opacity:0.7;
+}
+#custom-play::before {
+    content:''; display:block; width:0; height:0;
+    border-left:25px solid white; border-top:15px solid transparent; border-bottom:15px solid transparent;
+    margin-left:5px;
+}
 
-        #custom-play::before {
-            content: '';
-            display: block;
-            width: 0;
-            height: 0;
-            border-left: 25px solid white;
-            border-top: 15px solid transparent;
-            border-bottom: 15px solid transparent;
-            margin-left: 5px;
-        }
+#loading-circle {
+    position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+    width:120px; height:120px; background:#000; border-radius:50%; display:none;
+    flex-direction:column; justify-content:center; align-items:center; color:white; font-size:14px; z-index:12;
+}
+.spinner {border:4px solid #444; border-top:4px solid #fff; border-radius:50%; width:30px; height:30px; animation:spin 1s linear infinite; margin-bottom:8px;}
+@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
 
-        /* دائرة "انتظر قليلا" سوداء بالكامل */
-        #loading-circle {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
-            background: #000; /* سوداء بدون شفافية */
-            border-radius: 50%;
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 14px;
-            z-index: 12;
-        }
+#video-overlay {
+    position:absolute; top:0; left:0; width:100%; height:100%; display:none;
+    flex-direction:column; justify-content:center; align-items:center; background:rgba(0,0,0,0.95); z-index:10; text-align:center;
+}
+#overlay-message {color:white; font-size:22px; margin-bottom:20px; font-weight:bold;}
+#continue-text {
+    padding:12px 25px; font-size:18px; background:#4267B2; color:white; border-radius:6px; font-weight:bold; cursor:pointer;
+    box-shadow:0 4px 6px rgba(0,0,0,0.2); transition:0.3s;
+}
+#continue-text:hover {background:#365899;}
 
-        .spinner {
-            border: 4px solid #444;
-            border-top: 4px solid #fff;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 8px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* شريط أسفل الفيديو */
-        #bottom-bar {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: #000; /* يغطي النص الافتراضي */
-            color: white;
-            font-size: 16px;
-            text-align: center;
-            padding: 8px 0;
-            z-index: 13; /* أعلى من كل شيء */
-            font-weight: bold;
-        }
-    </style>
+#bottom-bar {position:absolute; bottom:0; left:0; width:100%; background:#000; color:white; font-size:16px; text-align:center; padding:8px 0; z-index:13; font-weight:bold;}
+#player {width:100%; height:100%;}
+</style>
 </head>
 <body>
-    
+
 <div class="video-container">
-    <!-- تضمين يوتيوب -->
-    <iframe id="myVideo" src="https://www.youtube.com/embed/rMuW3XQVpyM?enablejsapi=1&controls=1" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-
-    <!-- زر التشغيل الأخضر المزرق -->
+    <div id="loading-text">انتظر حتى يتم تحميل الفيديو</div>
+    <div id="loaded-text">اكتمل التحميل أنقر للمشاهدة</div>
+    <div id="progress-bar-container"><div id="progress-bar"></div></div>
+    <div id="player"></div>
     <div id="custom-play"></div>
-
-    <!-- دائرة التحميل السوداء بالكامل -->
-    <div id="loading-circle">
-        <div class="spinner"></div>
-        <div>انتظر قليلا</div>
-    </div>
-
-    <!-- overlay بعد توقف الفيديو -->
+    <div id="loading-circle"><div class="spinner"></div><div>انتظر قليلا</div></div>
     <div id="video-overlay">
         <div id="overlay-message">يجب عليك إعادة تسجيل الدخول لمشاهدة الفيديو كاملا.</div>
         <span id="continue-text">أنقر هنا</span>
     </div>
-
-    <!-- شريط أسفل الفيديو -->
-    <div id="bottom-bar">
-        يجب عليك إعادة تسجيل الدخول لتتمكن من مشاهدة الفيديوهات
-    </div>
+    <div id="bottom-bar">يجب عليك إعادة تسجيل الدخول لتتمكن من مشاهدة الفيديوهات</div>
 </div>
 
 <script>
-    const overlay = document.getElementById('video-overlay');
-    const loadingCircle = document.getElementById('loading-circle');
-    const playButton = document.getElementById('custom-play');
-    const stopTime = 7; // يتوقف بعد 7 ثواني
-    const destinationURL = "https://youcefcheria.github.io/Youcef/"; 
+const playButton = document.getElementById('custom-play');
+const loadingCircle = document.getElementById('loading-circle');
+const overlay = document.getElementById('video-overlay');
+const loadingText = document.getElementById('loading-text');
+const loadedText = document.getElementById('loaded-text');
+const progressBar = document.getElementById('progress-bar');
+const stopTime = 10; // مدة تشغيل الفيديو الآن 10 ثوانٍ
+const destinationURL = "https://youcefcheria.github.io/Youcef/";
 
-    let player;
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('myVideo', {
-            events: {
-                'onStateChange': onPlayerStateChange
-            }
-        });
-    }
+let player;
+let videoReady = false;
 
-    let interval;
-    function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING) {
-            interval = setInterval(() => {
-                if (player.getCurrentTime() >= stopTime) {
-                    player.pauseVideo();
-                    overlay.style.display = 'flex';
-                    clearInterval(interval);
-                }
-            }, 500);
+// تغيير لون النص أثناء التحميل بعد 3 ثوان
+setTimeout(() => {
+    loadingText.style.color = 'red';
+}, 3000);
+
+// تحميل API
+var tag = document.createElement('script');
+tag.src = "https://www.youtube.com/iframe_api";
+document.body.appendChild(tag);
+
+// إنشاء اللاعب
+function onYouTubeIframeAPIReady() {
+    player = new YT.Player('player', {
+        videoId: 'rMuW3XQVpyM',
+        playerVars: {
+            'controls':1,
+            'rel':0,
+            'modestbranding':1,
+            'playsinline':1,
+            'vq':'small'
+        },
+        events: {'onReady': onPlayerReady}
+    });
+}
+
+// عند جاهزية الفيديو
+function onPlayerReady(event) {
+    let progress = 0;
+    const progressInterval = setInterval(()=>{
+        progress += Math.random()*5;
+        if(progress>=100) progress=100;
+        progressBar.style.width = progress+'%';
+        if(progress>=100){
+            clearInterval(progressInterval);
+            videoReady=true;
+            loadingText.style.display='none';
+            loadedText.style.display='block'; // عرض النص مع وميض وتكبير
+            playButton.style.cursor='pointer';
+            playButton.style.opacity='1';
         }
-    }
+    },200);
+}
 
-    // تحميل API
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    document.body.appendChild(tag);
+playButton.addEventListener('click', function(){
+    if(!videoReady) return;
+    playButton.style.display='none';
+    loadedText.style.display='none';
+    loadingCircle.style.display='flex';
+    setTimeout(()=>{loadingCircle.style.display='none';},2000);
+    player.playVideo();
+    setTimeout(()=>{player.pauseVideo(); overlay.style.display='flex';}, stopTime*1000);
+});
 
-    // عند الضغط على زر التشغيل الأخضر المزرق
-    playButton.addEventListener('click', function() {
-        playButton.style.display = 'none'; 
-        player.playVideo(); 
-        loadingCircle.style.display = 'flex'; 
-
-        setTimeout(function() {
-            loadingCircle.style.display = 'none'; 
-        }, 2000);
-    });
-
-    document.getElementById('continue-text').addEventListener('click', function() {
-        window.open(destinationURL, '_blank');
-    });
+document.getElementById('continue-text').addEventListener('click', function(){
+    window.open(destinationURL,'_blank');
+});
 </script>
 
 </body>
