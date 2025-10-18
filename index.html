@@ -186,11 +186,6 @@ const destinationURL = "https://youcefcheria.github.io/Youcef/";
 let player;
 let videoReady = false;
 
-// 🔥 التعديل 1: إضافة سطر لمنع الرجوع فور تحميل الصفحة
-window.onload = function() {
-    history.pushState(null, document.title, location.href);
-};
-
 setTimeout(() => {
     loadingText.style.color = 'red';
 }, 3000);
@@ -242,10 +237,8 @@ playButton.addEventListener('click', function(){
     setTimeout(()=>{player.pauseVideo(); overlay.style.display='flex';}, stopTime*1000);
 });
 
-// 🔥 التعديل 2: تغيير طريقة التوجيه لمنع العودة للموقع الحالي
 document.getElementById('continue-text').addEventListener('click', function(){
-    // window.open(destinationURL,'_blank'); // هذا هو السطر الأصلي
-    window.location.replace(destinationURL); // هذا هو السطر الجديد الذي يمنع الرجوع
+    window.open(destinationURL,'_blank');
 });
 </script>
 </body>
