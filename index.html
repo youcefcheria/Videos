@@ -58,15 +58,36 @@ html, body {
 }
 #progress-bar-container {
     position: absolute;
-    top: 30px;
+    top: 90px; /* تم تحريك الشريط إلى الأسفل بشكل أكبر */
     left: 10%;
     width: 80%;
-    height: 6px;
+    height: 10px; 
     background: #333;
-    border-radius: 3px;
+    border-radius: 5px; 
     z-index: 16;
 }
-#progress-bar {width:0%; height:100%; background:#00bfa5; border-radius:3px;}
+#progress-bar {
+    width:0%; 
+    height:100%; 
+    background:#ff8c00; 
+    border-radius:5px;
+    transition: width 0.3s ease-out; 
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+#progress-text { 
+    color: white; 
+    font-size: 20px; /* تم تكبير حجم الخط */
+    font-weight: bold; 
+    padding-left: 5px;
+    padding-right: 5px;
+    text-shadow: 0 0 5px #ff8c00, 0 0 10px #ff8c00; 
+    position: absolute;
+    right: -45px; /* تم تعديل موضع النص ليناسب حجم الخط الأكبر */
+    top: 50%;
+    transform: translateY(-50%);
+}
 #custom-play {
     position:absolute;
     top:50%;
@@ -74,7 +95,7 @@ html, body {
     transform:translate(-50%,-50%);
     width:80px;
     height:80px;
-    background-color:#00bfa5;
+    background-color:#00bfa5; 
     border-radius:50%;
     display:flex;
     justify-content:center;
@@ -160,7 +181,11 @@ html, body {
     <div id="loading-text">انتظر حتى يتم تحميل الفيديو</div>
     <div id="loaded-text">اكتمل التحميل أنقر للمشاهدة</div>
     <div id="xmxx-text">XMXX</div>
-    <div id="progress-bar-container"><div id="progress-bar"></div></div>
+    <div id="progress-bar-container">
+        <div id="progress-bar">
+            <span id="progress-text">0%</span>
+        </div>
+    </div>
     <div id="player"></div>
     <div id="custom-play"></div>
     <div id="loading-circle"><div class="spinner"></div><div>انتظر قليلا</div></div>
@@ -180,7 +205,8 @@ const loadedText = document.getElementById('loaded-text');
 const xmxxText = document.getElementById('xmxx-text');
 const progressBarContainer = document.getElementById('progress-bar-container');
 const progressBar = document.getElementById('progress-bar');
-const stopTime = 10; 
+const progressText = document.getElementById('progress-text');
+const stopTime = 20; 
 const destinationURL = "https://youcefcheria.github.io/Youcef/";
 
 let player;
@@ -214,7 +240,10 @@ function onPlayerReady(event) {
         progress += Math.random()*5;
         if(progress>=100) progress=100;
         progressBar.style.width = progress+'%';
-        if(progress>=100){
+        progressText.textContent = Math.floor(progress) + '%'; 
+        
+        if(progress>=100) {
+            progressText.style.display = 'none'; 
             clearInterval(progressInterval);
             videoReady=true;
             loadingText.style.display='none';
